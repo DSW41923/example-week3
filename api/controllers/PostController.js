@@ -49,10 +49,10 @@ module.exports = {
    */
    destroy: function (req, res) {
 
-       Post.findOne(req.param("id")).done(function(err, user) {
+       Post.findOne(req.param("id")).done(function(err, Post) {
           // we now have a model with instance methods attached
           // destroy the record
-          user.destroy(function(err) {
+          Post.destroy(function(err) {
             // record has been removed            
           });
             
