@@ -49,10 +49,20 @@ module.exports = {
    */
    destroy: function (req, res) {
 
+       Post.findOne(req.param("id")).done(function(err, user) {
+          // we now have a model with instance methods attached
+          // destroy the record
+          user.destroy(function(err) {
+            // record has been removed            
+          });
+            
+            res.redirect("/");
+        });
+       
     // Send a JSON response
-    return res.json({
+    /*return res.json({
       hello: 'world'
-    });
+    });*/
   },
 
    updatePage: function (req, res) {

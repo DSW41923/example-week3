@@ -47,6 +47,10 @@ module.exports.routes = {
     view: "home/create"
   },
 
+   "DELETE /post/destroy/:id": {
+    controller: "post",
+    action: "destroy"
+  },
   "POST /post": {
     controller: "post",
     action: "create"
@@ -60,6 +64,10 @@ module.exports.routes = {
   "PUT /post/:id": {
     controller: "post",
     action: "update"
+  },
+  '/about': {
+    controller: "about",
+    action: "read"
   },
 
   "GET /:controller/:action/:id?": {},
