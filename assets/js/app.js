@@ -18,18 +18,6 @@
 
   socket.on('connect', function socketConnected() {
 
-    // Listen for Comet messages from Sails
-    socket.on('message', function messageReceived(message) {
-
-      ///////////////////////////////////////////////////////////
-      // Replace the following with your own custom logic
-      // to run when a new message arrives from the Sails.js
-      // server.
-      ///////////////////////////////////////////////////////////
-      log('New comet message received :: ', message);
-      //////////////////////////////////////////////////////
-
-    });
 
 
     ///////////////////////////////////////////////////////////
@@ -61,6 +49,66 @@
     }
   }
   
+    var app = angular.module("myapp",[]);
+    app.controller("mainCtrl",function($scope){
+        
+        // Listen for Comet messages from Sails
+    socket.on('message', function messageReceived(message) {
+
+      ///////////////////////////////////////////////////////////
+      // Replace the following with your own custom logic
+      // to run when a new message arrives from the Sails.js
+      // server.
+      ///////////////////////////////////////////////////////////
+      console.log(message);
+      //////////////////////////////////////////////////////
+        
+        if(message.verb == "create")
+            {
+                $scope.lists.push(message.data);
+                $scope.$apply();
+            }
+        
+        
+        if(message.verb == "destroy")
+            {
+                $scope.lists.forEach(function (list, idx){
+                    if(list.is == message.id){
+                    $scope.lists.splice(idx, 1);
+                    $scope.$apply();
+                    }                 
+                    
+                });
+            }
+        });
+        
+
+        
+        socket.get("/list", function(lists){
+            console.log(lists);
+            
+            $scope.lists = lists;
+            $scope.$apply();
+        });
+        
+        $scope.create = function(){
+            socket.post("/list", {}, function(data){
+                console.log("create list");
+                console.log(data);
+                $scope.lists.push(data);
+                $scope.$apply();
+            });
+        }
+         $scope.delete = function($index){
+            socket.delete("/list/" + $scope.lists[$index].id, function(data){
+                console.log("delete list");
+                console.log(data);
+                $scope.lists.splice($index, 1);
+                $scope.$apply();
+            });
+        }
+        
+    });
 
 })(
 
